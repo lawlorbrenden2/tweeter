@@ -1,0 +1,5 @@
+Milestone 2A:
+    - Look for code that receives dummy data as a clue for code to be moved to 
+        service classes
+    - Also move PostStatus
+    
