@@ -2,4 +2,15 @@ Milestone 2A:
     - Look for code that receives dummy data as a clue for code to be moved to 
         service classes
     - Also move PostStatus
-    
+    - Each view has only 1 presenter
+        - Presenters can reference multiple services, but views should not reference
+            multiple presenters
+    - The listener in the view should match the interface in the presenter
+    - App.tsx knows which presenter should be used. Have it create the presenter and
+        pass it in
+    - Move most of UserNavigation functionality into presenter
+    - Look through every component and hooks (primarily UserNavigation)
+    - Look through everything has dummy data
+
+Milestone 2B:
+    - Remove code duplication from OAuth.tsx
