@@ -1,7 +1,7 @@
 import { AuthToken, User, FakeData } from "tweeter-shared";
 
 export class FollowService {
-  public async loadMoreFollowees(
+  public async getFollowees(
     authToken: AuthToken,
     userAlias: string,
     pageSize: number,
@@ -11,7 +11,7 @@ export class FollowService {
     return FakeData.instance.getPageOfUsers(lastItem, pageSize, userAlias);
   }
 
-  public async loadMoreFollowers(
+  public async getFollowers(
     authToken: AuthToken,
     userAlias: string,
     pageSize: number,
