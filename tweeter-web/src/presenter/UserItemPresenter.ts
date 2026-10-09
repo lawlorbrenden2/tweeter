@@ -8,13 +8,13 @@ export interface UserItemView {
 
 export abstract class UserItemPresenter {
   private _view: UserItemView;
-  private userService: UserService;
+  private _userService: UserService;
   private _hasMoreItems = true;
   private _lastItem: User | null = null;
 
   protected constructor(view: UserItemView) {
     this._view = view;
-    this.userService = new UserService();
+    this._userService = new UserService();
   }
 
   protected get view() {
@@ -46,7 +46,7 @@ export abstract class UserItemPresenter {
     authToken: AuthToken,
     alias: string,
   ): Promise<User | null> {
-    return this.userService.getUser(authToken, alias);
+    return this._userService.getUser(authToken, alias);
   }
 
   public abstract loadMoreItems(authToken: AuthToken, userAlias: string): void;
