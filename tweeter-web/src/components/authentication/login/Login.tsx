@@ -42,7 +42,7 @@ const Login = (props: Props) => {
   };
 
   const doLogin = async () => {
-    presenter.doLogin(alias, password, rememberMe, props.originalUrl);
+    presenter.login(alias, password, rememberMe, props.originalUrl);
   };
 
   const inputFieldFactory = () => {
