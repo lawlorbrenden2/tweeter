@@ -5,7 +5,7 @@ export class RegisterPresenter extends AuthPresenter {
     super(view);
     
   }
-  public async doRegister(
+  public async register(
     firstName: string,
     lastName: string,
     alias: string,

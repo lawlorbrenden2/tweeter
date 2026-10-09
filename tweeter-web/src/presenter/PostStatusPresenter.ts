@@ -18,14 +18,6 @@ export class PostStatusPresenter {
     this._statusService = new StatusService();
   }
 
-  protected get view() {
-    return this._view;
-  }
-
-  protected get statusService() {
-    return this._statusService;
-  }
-
   public async submitPost(
     authToken: AuthToken,
     post: string,
@@ -34,8 +26,8 @@ export class PostStatusPresenter {
     let postingStatusToastId = "";
 
     try {
-      this.view.setIsLoading(true);
-      postingStatusToastId = this.view.displayInfoMessage(
+      this._view.setIsLoading(true);
+      postingStatusToastId = this._view.displayInfoMessage(
         "Posting status...",
         0,
       );
@@ -44,15 +36,15 @@ export class PostStatusPresenter {
 
       await this._statusService.postStatus(authToken!, status);
 
-      this.view.setPost("");
-      this.view.displayInfoMessage("Status posted!", 2000);
+      this._view.setPost("");
+      this._view.displayInfoMessage("Status posted!", 2000);
     } catch (error) {
-      this.view.displayErrorMessage(
+      this._view.displayErrorMessage(
         `Failed to post the status because of exception: ${error}`,
       );
     } finally {
-      this.view.deleteMessage(postingStatusToastId);
-      this.view.setIsLoading(false);
+      this._view.deleteMessage(postingStatusToastId);
+      this._view.setIsLoading(false);
     }
   }
 }

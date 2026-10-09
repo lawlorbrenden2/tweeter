@@ -46,7 +46,7 @@ const Register = () => {
 
   const registerOnEnter = (event: React.KeyboardEvent<HTMLElement>) => {
     if (event.key == "Enter" && !checkSubmitButtonStatus()) {
-      doRegister();
+      register();
     }
   };
 
@@ -91,8 +91,8 @@ const Register = () => {
     return file.name.split(".").pop();
   };
 
-  const doRegister = async () => {
-    presenter.doRegister(
+  const register = async () => {
+    presenter.register(
       firstName,
       lastName,
       alias,
@@ -172,7 +172,7 @@ const Register = () => {
       setRememberMe={setRememberMe}
       submitButtonDisabled={checkSubmitButtonStatus}
       isLoading={isLoading}
-      submit={doRegister}
+      submit={register}
     />
   );
 };
