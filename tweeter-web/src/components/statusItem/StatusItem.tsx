@@ -37,7 +37,7 @@ const StatusItem = (props: Props) => {
             </h2>
             {props.status.formattedDate}
             <br />
-            <Post status={props.status} featurePath={ props.featureUrl }/>
+            <Post status={props.status} featurePath={props.featureUrl} />
           </div>
         </div>
       </div>
