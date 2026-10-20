@@ -14,3 +14,8 @@ Milestone 2A:
 
 Milestone 2B:
     - Remove code duplication from OAuth.tsx
+    - Move image file method out of Register.tsx to a presenter (Image Bytes)
+        - Search for Image Bytes 
+
+Milestone 3:
+    - Make sure that all of the presenters are using await keyword
