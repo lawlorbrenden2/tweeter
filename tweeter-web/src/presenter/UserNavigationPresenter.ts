@@ -8,12 +8,7 @@ export interface UserNavigationView extends View {
 }
 
 export class UserNavigationPresenter extends Presenter<UserNavigationView> {
-  _userService: UserService;
-
-  public constructor(view: UserNavigationView) {
-    super(view);
-    this._userService = new UserService();
-  }
+  private _userService = new UserService();
 
   public async navigateToUser(
     authToken: AuthToken,
@@ -21,7 +16,7 @@ export class UserNavigationPresenter extends Presenter<UserNavigationView> {
     featurePath: string,
     displayedUser: User | null,
   ): Promise<void> {
-    this.doFailureReportingOperation(async () => {
+    await this.doFailureReportingOperation(async () => {
       const toUser = await this._userService.getUser(authToken, alias);
       if (toUser) {
         if (!displayedUser || !toUser.equals(displayedUser)) {

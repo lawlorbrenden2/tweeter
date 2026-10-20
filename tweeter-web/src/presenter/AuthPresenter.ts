@@ -27,7 +27,7 @@ export abstract class AuthPresenter extends Presenter<AuthView> {
 
   protected async doAuthenticationOperation(
     operation: () => Promise<[User, AuthToken]>,
-    actionDescription: string,
+    operationDescription: string,
     rememberMe: boolean,
     originalUrl?: string,
   ) {
@@ -42,7 +42,7 @@ export abstract class AuthPresenter extends Presenter<AuthView> {
       } else {
         this.view.navigate(`/feed/${user.alias}`);
       }
-    }, actionDescription);
+    }, operationDescription);
 
     this.view.setIsLoading(false);
   }
