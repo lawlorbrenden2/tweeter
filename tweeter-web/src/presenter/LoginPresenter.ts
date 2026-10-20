@@ -5,7 +5,7 @@ export class LoginPresenter extends AuthPresenter {
     super(view);
   }
 
-public async login(
+  public async login(
     alias: string,
     password: string,
     rememberMe: boolean,
@@ -15,7 +15,7 @@ public async login(
       () => this.userService.login(alias, password),
       "log user in",
       rememberMe,
-      originalUrl
+      originalUrl,
     );
   }
 }

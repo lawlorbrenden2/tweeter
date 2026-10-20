@@ -1,24 +1,19 @@
 import { AuthToken, Status, User } from "tweeter-shared";
 import { UserService } from "../model.service/UserService";
+import { Presenter, View } from "./Presenter";
 
-export interface StatusItemView {
+export interface StatusItemView extends View {
   addItems: (items: Status[]) => void;
-  displayErrorMessage: (message: string) => void;
 }
 
-export abstract class StatusItemPresenter {
-  private _view: StatusItemView;
+export abstract class StatusItemPresenter extends Presenter<StatusItemView> {
   private userService: UserService;
   private _hasMoreItems = true;
   private _lastItem: Status | null = null;
 
   protected constructor(view: StatusItemView) {
-    this._view = view;
+    super(view);
     this.userService = new UserService();
-  }
-
-  protected get view() {
-    return this._view;
   }
 
   protected get lastItem() {
@@ -50,4 +45,17 @@ export abstract class StatusItemPresenter {
   }
 
   public abstract loadMoreItems(authToken: AuthToken, userAlias: string): void;
+
+  protected async doStatusItemOperation(
+    operation: () => Promise<[Status[], boolean]>,
+    operationDescription: string
+  ) {
+    await this.doFailureReportingOperation(async () => {
+      const [newItems, hasMore] = await operation();
+
+      this.hasMoreItems = hasMore;
+      this.lastItem = newItems.length > 0 ? newItems[newItems.length - 1] : null;
+      this.view.addItems(newItems);
+    }, operationDescription);
+  }
 }

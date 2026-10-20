@@ -1,18 +1,17 @@
 import { AuthToken, User } from "tweeter-shared";
 import { UserService } from "../model.service/UserService";
+import { Presenter, View } from "./Presenter";
 
-export interface UserNavigationView {
+export interface UserNavigationView extends View {
   setDisplayedUser: (displayedUser: User) => void;
   navigate: (url: string) => void;
-  displayErrorMessage: (message: string) => void;
 }
 
-export class UserNavigationPresenter {
-  _view: UserNavigationView;
+export class UserNavigationPresenter extends Presenter<UserNavigationView> {
   _userService: UserService;
 
   public constructor(view: UserNavigationView) {
-    this._view = view;
+    super(view);
     this._userService = new UserService();
   }
 
@@ -22,18 +21,14 @@ export class UserNavigationPresenter {
     featurePath: string,
     displayedUser: User | null,
   ): Promise<void> {
-    try {
+    this.doFailureReportingOperation(async () => {
       const toUser = await this._userService.getUser(authToken, alias);
       if (toUser) {
         if (!displayedUser || !toUser.equals(displayedUser)) {
-          this._view.setDisplayedUser(toUser);
-          this._view.navigate(`${featurePath}/${toUser.alias}`);
+          this.view.setDisplayedUser(toUser);
+          this.view.navigate(`${featurePath}/${toUser.alias}`);
         }
       }
-    } catch (error) {
-      this._view.displayErrorMessage(
-        `Failed to get user because of exception: ${error}`,
-      );
-    }
+    }, "get user");
   }
 }

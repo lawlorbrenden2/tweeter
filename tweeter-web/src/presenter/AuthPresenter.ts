@@ -35,7 +35,6 @@ export abstract class AuthPresenter extends Presenter<AuthView> {
 
     await this.doFailureReportingOperation(async () => {
       const [user, authToken] = await operation();
-
       this.view.updateUserInfo(user, user, authToken, rememberMe);
 
       if (!!originalUrl) {

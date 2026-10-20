@@ -12,21 +12,15 @@ export class StoryPresenter extends StatusItemPresenter {
     this.statusService = new StatusService();
   }
   public async loadMoreItems(authToken: AuthToken, userAlias: string) {
-    try {
-      const [newItems, hasMore] = await this.statusService.getStoryItems(
-        authToken,
-        userAlias,
-        PAGE_SIZE,
-        this.lastItem,
-      );
-
-      this.hasMoreItems = hasMore;
-      this.lastItem = newItems.length > 0 ? newItems[newItems.length - 1] : null;
-      this.view.addItems(newItems);
-    } catch (error) {
-      this.view.displayErrorMessage(
-        `Failed to load stories because of exception: ${error}`,
-      );
-    }
+    await this.doStatusItemOperation(
+      () =>
+        this.statusService.getStoryItems(
+          authToken,
+          userAlias,
+          PAGE_SIZE,
+          this.lastItem,
+        ),
+      "load stories",
+    );
   }
 }
