@@ -10,6 +10,10 @@ export interface UserNavigationView extends View {
 export class UserNavigationPresenter extends Presenter<UserNavigationView> {
   private _userService = new UserService();
 
+  public constructor(view: UserNavigationView) {
+    super(view);
+  }
+
   public async navigateToUser(
     authToken: AuthToken,
     alias: string,

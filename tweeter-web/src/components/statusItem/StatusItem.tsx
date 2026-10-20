@@ -5,7 +5,7 @@ import { useUserNavigation } from "../userInfo/UserNavigationHook";
 
 interface Props {
   status: Status;
-  featureUrl: string;
+  featurePath: string;
 }
 
 const StatusItem = (props: Props) => {
@@ -29,15 +29,15 @@ const StatusItem = (props: Props) => {
               </b>{" "}
               -{" "}
               <Link
-                to={`${props.featureUrl}/${props.status.user.alias}`}
-                onClick={(event) => navigateToUser(event, props.featureUrl)}
+                to={`${props.featurePath}/${props.status.user.alias}`}
+                onClick={(event) => navigateToUser(event, props.featurePath)}
               >
                 {props.status.user.alias}
               </Link>
             </h2>
             {props.status.formattedDate}
             <br />
-            <Post status={props.status} featurePath={props.featureUrl} />
+            <Post status={props.status} featurePath={props.featurePath} />
           </div>
         </div>
       </div>

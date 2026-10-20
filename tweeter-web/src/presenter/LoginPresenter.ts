@@ -1,6 +1,9 @@
 import { AuthPresenter, AuthView } from "./AuthPresenter";
 
 export class LoginPresenter extends AuthPresenter {
+  public constructor(view: AuthView) {
+    super(view);
+  }
   public async login(
     alias: string,
     password: string,

@@ -5,6 +5,10 @@ export class RegisterPresenter extends AuthPresenter {
   private imageBytes: Uint8Array = new Uint8Array();
   private imageFileExtension: string = "";
 
+  public constructor(view: AuthView) {
+    super(view);
+  }
+
   public handleImageFile = (file: File | undefined) => {
     if (file) {
       const reader = new FileReader();
