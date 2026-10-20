@@ -14,11 +14,11 @@ import UserItemScroller from "./components/mainLayout/UserItemScroller";
 import StatusItemScroller from "./components/mainLayout/StatusItemScroller";
 import { useUserInfo } from "./components/userInfo/UserInfoHooks";
 import { FolloweePresenter } from "./presenter/FolloweePresenter";
-import { UserItemView } from "./presenter/UserItemPresenter";
 import { FollowerPresenter } from "./presenter/FollowerPresenter";
-import { StatusItemView } from "./presenter/StatusItemPresenter";
 import { StoryPresenter } from "./presenter/StoryPresenter";
 import { FeedPresenter } from "./presenter/FeedPresenter";
+import { Status, User } from "tweeter-shared";
+import { PagedItemView } from "./presenter/PagedItemPresenter";
 
 const App = () => {
   const { currentUser, authToken } = useUserInfo();
@@ -57,8 +57,9 @@ const AuthenticatedRoutes = () => {
             <StatusItemScroller
               key={`status-${displayedUser!.alias}`}
               featureUrl="/feed"
-              presenterFactory={(view: StatusItemView) =>
-                new FeedPresenter(view)}
+              presenterFactory={(view: PagedItemView<Status>) =>
+                new FeedPresenter(view)
+              }
             />
           }
         />
@@ -68,7 +69,7 @@ const AuthenticatedRoutes = () => {
             <StatusItemScroller
               key={`story-${displayedUser!.alias}`}
               featureUrl="/story"
-              presenterFactory={(view: StatusItemView) =>
+              presenterFactory={(view: PagedItemView<Status>) =>
                 new StoryPresenter(view)
               }
             />
@@ -80,7 +81,7 @@ const AuthenticatedRoutes = () => {
             <UserItemScroller
               key={`followees-${displayedUser!.alias}`}
               featureUrl="/followees"
-              presenterFactory={(view: UserItemView) =>
+              presenterFactory={(view: PagedItemView<User>) =>
                 new FolloweePresenter(view)
               }
             />
@@ -92,7 +93,7 @@ const AuthenticatedRoutes = () => {
             <UserItemScroller
               key={`followers-${displayedUser!.alias}`}
               featureUrl="/followers"
-              presenterFactory={(view: UserItemView) =>
+              presenterFactory={(view: PagedItemView<User>) =>
                 new FollowerPresenter(view)
               }
             />
