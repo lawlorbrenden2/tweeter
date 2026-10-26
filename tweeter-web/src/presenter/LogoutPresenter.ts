@@ -14,10 +14,15 @@ export class LogoutPresenter extends Presenter<LogoutView> {
     super(view);
     this._userService = new UserService();
   }
+
+  public get service() {
+    return this._userService;
+  }
+
   public async logOut(authToken: AuthToken) {
     const loggingOutToastId = this.view.displayInfoMessage("Logging Out...", 0);
     await this.doFailureReportingOperation(async () => {
-      await this._userService.logout(authToken);
+      await this.service.logout(authToken);
 
       this.view.deleteMessage(loggingOutToastId);
       this.view.clearUserInfo();
@@ -25,3 +30,4 @@ export class LogoutPresenter extends Presenter<LogoutView> {
     }, "log user out");
   }
 }
+ 
