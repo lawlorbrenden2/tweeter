@@ -11,6 +11,7 @@ import { LoginPresenter } from "../../../presenter/LoginPresenter";
 
 interface Props {
   originalUrl?: string;
+  presenter?: LoginPresenter;
 }
 
 const Login = (props: Props) => {
@@ -29,7 +30,9 @@ const Login = (props: Props) => {
     navigate: navigate,
     displayErrorMessage: displayErrorMessage,
   };
-  const presenter = new LoginPresenter(listener);
+  const presenter = props.presenter ?? new LoginPresenter(listener);
+
+  
 
   const checkSubmitButtonStatus = (): boolean => {
     return !alias || !password;
