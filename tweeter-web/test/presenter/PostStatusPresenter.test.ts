@@ -20,8 +20,6 @@ describe("postStatusPresenter", () => {
   let mockService: StatusService;
   const mockUser = mock<User>();
   const currentUser = instance(mockUser);
-  const mockStatus = mock<Status>();
-  const currentStatus = instance(mockStatus);
 
   const authToken = new AuthToken("abc123", Date.now());
   beforeEach(() => {
@@ -88,10 +86,6 @@ describe("postStatusPresenter", () => {
       "messageID123",
       currentUser,
     );
-
-    let [errorString] = capture(
-      mockPostStatusPresenterView.displayErrorMessage,
-    ).last();
 
     verify(mockPostStatusPresenterView.deleteMessage("messageID123")).once();
     verify(
