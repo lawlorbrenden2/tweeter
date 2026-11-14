@@ -34,7 +34,8 @@ export class ServerFacade {
       }
     } else {
       console.error(response);
-      throw new Error(response.message ?? undefined);
+      const errorMsg = response.message ?? (response as any).errorMessage ?? "Unknown Server Error";
+      throw new Error(errorMsg);
     }
   }
 }
