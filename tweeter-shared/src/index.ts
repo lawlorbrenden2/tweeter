@@ -22,6 +22,11 @@ export type { UserDto } from "./model/dto/UserDto";
 export type { PagedUserItemRequest } from "./model/net/request/PagedUserItemRequest";
 
 //
+// Responses
+//
+export type { PagedUserItemResponse } from "./model/net/response/PagedUserItemResponse"
+
+//
 // Other
 //
 export { FakeData } from "./util/FakeData";
