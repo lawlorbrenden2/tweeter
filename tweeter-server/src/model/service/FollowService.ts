@@ -1,7 +1,6 @@
 import { AuthToken, User, FakeData, UserDto } from "tweeter-shared";
 import { Service } from "../../../../tweeter-web/src/model.service/Service";
 
-// pick up at 43:00
 
 export class FollowService implements Service {
   public async getFollowees(
