@@ -6,7 +6,8 @@
   "scripts": {
     "build": "npm run compile",
     "compile": "npm run clean && tsc",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "build:layer": "rm -rf layer/nodejs/node_modules && cp -R node_modules layer/nodejs/ && rm -f layer/nodejs/node_modules/tweeter-shared && cp -R ../tweeter-shared layer/nodejs/node_modules/tweeter-shared"
   },
   "keywords": [],
   "type": "commonjs",

@@ -161,7 +161,7 @@ Resources:
       ##### TODO: Change "userGetFunction" to the actual function name.
       FunctionName: getFolloweesFunction
       ##### TODO: Modify Handler property to match your code. This identifies the exact function that the lambda should run.
-      Handler: src/lambda/follow/GetFolloweesLambda.handler
+      Handler: lambda/follow/GetFolloweesLambda.handler
       Policies: *commonPolicies
       Events:
         PostApi:
