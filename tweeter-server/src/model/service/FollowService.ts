@@ -1,5 +1,5 @@
 import { AuthToken, User, FakeData, UserDto } from "tweeter-shared";
-import { Service } from "../../../../tweeter-web/src/model.service/Service";
+import { Service } from "./Service";
 
 
 export class FollowService implements Service {
