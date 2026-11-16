@@ -1,3 +1,4 @@
+// AI-assisted: see AI-ATTRIBUTION.md
 import {
   PagedUserItemRequest,
   PagedUserItemResponse,
@@ -10,6 +11,31 @@ export class ServerFacade {
   private SERVER_URL = "https://1d38tnplx5.execute-api.us-east-2.amazonaws.com/prod";
 
   private clientCommunicator = new ClientCommunicator(this.SERVER_URL);
+
+  public async getMoreFollowers(
+    request: PagedUserItemRequest,
+  ): Promise<[User[], boolean]> {
+    const response = await this.clientCommunicator.doPost<
+      PagedUserItemRequest,
+      PagedUserItemResponse
+    >(request, "/getFollowers");
+
+    if (!response.success) {
+      const errorResponse = response as PagedUserItemResponse & {
+        error?: string;
+        errorMessage?: string;
+      };
+      throw new Error(
+        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
+      );
+    }
+    if (response.items == null) {
+      throw new Error("No followers found");
+    }
+
+    const items = response.items.map((dto) => User.fromDto(dto) as User);
+    return [items, response.hasMore];
+  }
 
   public async getMoreFollowees(
     request: PagedUserItemRequest,

@@ -120,9 +120,18 @@ Resources:
                 responses: *commonAmazonResponses
               responses: *commonSwaggerResponses
 
-            #
-            # TODO: ADD MORE ENDPOINT DEFINITIONS HERE
-            #
+          /getFollowers:
+            post:
+              consumes: *commonConsumes
+              produces: *commonProduces
+              x-amazon-apigateway-integration:
+                type: aws
+                httpMethod: POST
+                uri:
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${getFollowersFunction.Arn}/invocations
+                requestTemplates: *commonRequestTemplates
+                responses: *commonAmazonResponses
+              responses: *commonSwaggerResponses
 
 
   #
@@ -173,9 +182,19 @@ Resources:
             Path: /getFollowees
             Method: POST
 
-  #
-  # TODO: ADD MORE WEB API LAMBDA DEFINITIONS HERE
-  #
+  getFollowersFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: getFollowersFunction
+      Handler: lambda/follow/GetFollowersLambda.handler
+      Policies: *commonPolicies
+      Events:
+        PostApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref tweeterApi
+            Path: /getFollowers
+            Method: POST
 
 
   #
