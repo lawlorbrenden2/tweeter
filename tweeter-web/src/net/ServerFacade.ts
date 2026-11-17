@@ -8,6 +8,8 @@ import {
   IsFollowerResponse,
   PagedUserItemRequest,
   PagedUserItemResponse,
+  UnfollowRequest,
+  UnfollowResponse,
   User,
   UserDto,
 } from "tweeter-shared";
@@ -26,6 +28,23 @@ export class ServerFacade {
 
     if (!response.success) {
       const errorResponse = response as FollowResponse & {
+        error?: string;
+        errorMessage?: string;
+      };
+      throw new Error(
+        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
+      );
+    }
+  }
+
+  public async unfollow(request: UnfollowRequest): Promise<void> {
+    const response = await this.clientCommunicator.doPost<
+      UnfollowRequest,
+      UnfollowResponse
+    >(request, "/unfollow");
+
+    if (!response.success) {
+      const errorResponse = response as UnfollowResponse & {
         error?: string;
         errorMessage?: string;
       };

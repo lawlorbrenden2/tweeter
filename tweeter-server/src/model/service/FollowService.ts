@@ -1,5 +1,5 @@
 // AI-assisted: see AI-ATTRIBUTION.md
-import { AuthToken, User, FakeData, UserDto } from "tweeter-shared";
+import { User, FakeData, UserDto } from "tweeter-shared";
 import { Service } from "./Service";
 
 
@@ -65,8 +65,8 @@ export class FollowService implements Service {
   }
 
   public async unfollow(
-    authToken: AuthToken,
-    userToUnfollow: User,
+    token: string,
+    userToUnfollow: string,
   ): Promise<[followerCount: number, followeeCount: number]> {
     // Pause so we can see the unfollow message. Remove when connected to the server
     await new Promise((f) => setTimeout(f, 2000));
@@ -74,12 +74,12 @@ export class FollowService implements Service {
     // TODO: Call the server
 
     const followerCount = await this.getFollowerCount(
-      authToken.token,
-      userToUnfollow.alias,
+      token,
+      userToUnfollow,
     );
     const followeeCount = await this.getFolloweeCount(
-      authToken.token,
-      userToUnfollow.alias,
+      token,
+      userToUnfollow,
     );
 
     return [followerCount, followeeCount];

@@ -102,7 +102,10 @@ public async getFollowees(
     // Pause so we can see the unfollow message. Remove when connected to the server
     await new Promise((f) => setTimeout(f, 2000));
 
-    // TODO: Call the server
+    await this.serverFacade.unfollow({
+      token: authToken.token,
+      userToUnfollow: userToUnfollow.alias,
+    });
 
     const followerCount = await this.getFollowerCount(
       authToken,
