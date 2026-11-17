@@ -2,6 +2,8 @@
 import {
   FollowCountRequest,
   FollowCountResponse,
+  FollowRequest,
+  FollowResponse,
   IsFollowerRequest,
   IsFollowerResponse,
   PagedUserItemRequest,
@@ -15,6 +17,23 @@ export class ServerFacade {
   private SERVER_URL = "https://1d38tnplx5.execute-api.us-east-2.amazonaws.com/prod";
 
   private clientCommunicator = new ClientCommunicator(this.SERVER_URL);
+
+  public async follow(request: FollowRequest): Promise<void> {
+    const response = await this.clientCommunicator.doPost<
+      FollowRequest,
+      FollowResponse
+    >(request, "/follow");
+
+    if (!response.success) {
+      const errorResponse = response as FollowResponse & {
+        error?: string;
+        errorMessage?: string;
+      };
+      throw new Error(
+        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
+      );
+    }
+  }
 
   public async getFolloweeCount(
     request: FollowCountRequest,

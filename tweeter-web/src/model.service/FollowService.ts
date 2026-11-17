@@ -84,7 +84,10 @@ public async getFollowees(
     // Pause so we can see the follow message. Remove when connected to the server
     await new Promise((f) => setTimeout(f, 2000));
 
-    // TODO: Call the server
+    await this.serverFacade.follow({
+      token: authToken.token,
+      userToFollow: userToFollow.alias,
+    });
 
     const followerCount = await this.getFollowerCount(authToken, userToFollow);
     const followeeCount = await this.getFolloweeCount(authToken, userToFollow);
