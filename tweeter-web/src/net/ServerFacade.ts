@@ -1,5 +1,7 @@
 // AI-assisted: see AI-ATTRIBUTION.md
 import {
+  IsFollowerRequest,
+  IsFollowerResponse,
   PagedUserItemRequest,
   PagedUserItemResponse,
   User,
@@ -11,6 +13,30 @@ export class ServerFacade {
   private SERVER_URL = "https://1d38tnplx5.execute-api.us-east-2.amazonaws.com/prod";
 
   private clientCommunicator = new ClientCommunicator(this.SERVER_URL);
+
+  public async getIsFollowerStatus(
+    request: IsFollowerRequest,
+  ): Promise<boolean> {
+    const response = await this.clientCommunicator.doPost<
+      IsFollowerRequest,
+      IsFollowerResponse
+    >(request, "/getIsFollowerStatus");
+
+    if (!response.success) {
+      const errorResponse = response as IsFollowerResponse & {
+        error?: string;
+        errorMessage?: string;
+      };
+      throw new Error(
+        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
+      );
+    }
+    if (typeof response.isFollower !== "boolean") {
+      throw new Error("No follower status returned");
+    }
+
+    return response.isFollower;
+  }
 
   public async getMoreFollowers(
     request: PagedUserItemRequest,

@@ -7,3 +7,10 @@
 - Tool: Cline
 - Task: Add and export shared IsFollowerRequest and IsFollowerResponse interfaces for getIsFollowerStatus, following existing shared interface conventions without adding tests.
 - Review: I inspected IsFollowerRequest.ts, IsFollowerResponse.ts, index.ts to make sure all of the files were properly generated according to the established conventions.
+
+## 2026-11-16: tweeter-server/src/lambda/follow/GetIsFollowerStatusLambda.ts (new file), tweeter-server/src/model/service/FollowService.ts, tweeter-server/template.yaml, tweeter-web/src/net/ServerFacade.ts, tweeter-web/src/model.service/FollowService.ts, AI-ATTRIBUTION.md
+- Tool: Cline
+- Task: Implement POST /getIsFollowerStatus end-to-end using the existing exported shared interfaces, backend FollowService, and frontend facade. Follow existing Lambda validation and error handling conventions without adding tests.
+- Review: I inspected GetIsFollowerStatusLambda.ts to ensure it contained no cross-project imports from tweeter-web, verified the handler path and API path in template.yaml were correct, and ran npm run build locally to confirm both the server and web modules compiled without errors.
+
+
