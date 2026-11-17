@@ -3,6 +3,11 @@ import { FakeData, Status, StatusDto } from "tweeter-shared";
 import { Service } from "./Service";
 
 export class StatusService implements Service {
+  public async postStatus(token: string, statusDto: StatusDto): Promise<void> {
+    // Simulate a successful post without persisting the status.
+    return;
+  }
+
   public async getStoryItems(
     token: string,
     userAlias: string,
