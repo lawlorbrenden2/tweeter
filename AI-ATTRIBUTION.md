@@ -68,3 +68,8 @@
 - Task: Implement POST /logout end-to-end with shared interfaces, a simulated backend service, a Lambda matching PostStatusLambda validation/error handling, SAM configuration, and frontend wiring. Build all three modules without adding tests or dependencies, removing the stale registration token field that blocked the web build.
 - Review: I inspected LogoutLambda.ts to ensure it contained no cross-project imports and validated the token. I verified the backend UserService simulates a successful logout by returning void, and checked that the frontend ServerFacade properly sends the token. I also reviewed and approved the agent's fix in the frontend UserService to remove the stale token field from the register payload. Finally, I rebuilt the Lambda layer and confirmed all modules compiled successfully.
 
+## 2026-11-17: tweeter-web/test/network/ServerFacade.test.ts (new file), tweeter-web/test/model.service/StatusService.test.ts (new file), AI-ATTRIBUTION.md
+- Tool: Cline
+- Task: Add four success-path Jest integration tests calling ServerFacade and StatusService directly against the deployed API, checking registration values, follower results and counts, and story statuses.
+- Review: I inspected both test files to ensure they were testing for actual data validation rather than just checking if a generic object was returned. I also confirmed no failure case tests were written as per the constraints, and ran npm test to ensure all tests passed successfully.
+
