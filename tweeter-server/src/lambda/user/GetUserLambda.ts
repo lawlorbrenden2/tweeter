@@ -1,0 +1,35 @@
+// AI-assisted: see AI-ATTRIBUTION.md
+import { GetUserRequest, GetUserResponse } from "tweeter-shared";
+import { UserService } from "../../model/service/UserService";
+
+export const handler = async (
+  request: GetUserRequest,
+): Promise<GetUserResponse & { headers: Record<string, string> }> => {
+  if (!request?.token) {
+    throw new Error("[bad-request] missing token");
+  }
+  if (!request.userAlias) {
+    throw new Error("[bad-request] missing userAlias");
+  }
+  try {
+    const userService = new UserService();
+    const user = await userService.getUser(request.token, request.userAlias);
+
+    return {
+      success: true,
+      message: null,
+      user: user,
+      headers: { "Access-Control-Allow-Origin": "*" },
+    };
+  } catch (error: unknown) {
+    if (
+      error instanceof Error &&
+      /^\[(bad-request|unauthorized|internal-server-error)\]/.test(
+        error.message,
+      )
+    ) {
+      throw error;
+    }
+    throw new Error("[internal-server-error]");
+  }
+};

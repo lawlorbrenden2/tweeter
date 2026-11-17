@@ -4,6 +4,8 @@ import {
   FollowCountResponse,
   FollowRequest,
   FollowResponse,
+  GetUserRequest,
+  GetUserResponse,
   IsFollowerRequest,
   IsFollowerResponse,
   PagedStatusItemRequest,
@@ -24,6 +26,25 @@ export class ServerFacade {
   private SERVER_URL = "https://1d38tnplx5.execute-api.us-east-2.amazonaws.com/prod";
 
   private clientCommunicator = new ClientCommunicator(this.SERVER_URL);
+
+  public async getUser(request: GetUserRequest): Promise<User | null> {
+    const response = await this.clientCommunicator.doPost<
+      GetUserRequest,
+      GetUserResponse
+    >(request, "/getUser");
+
+    if (!response.success) {
+      const errorResponse = response as GetUserResponse & {
+        error?: string;
+        errorMessage?: string;
+      };
+      throw new Error(
+        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
+      );
+    }
+
+    return User.fromDto(response.user);
+  }
 
   public async postStatus(request: PostStatusRequest): Promise<void> {
     const response = await this.clientCommunicator.doPost<
