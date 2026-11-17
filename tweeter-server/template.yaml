@@ -134,6 +134,19 @@ Resources:
               responses: *commonSwaggerResponses
 
 
+          /getFolloweeCount:
+            post:
+              consumes: *commonConsumes
+              produces: *commonProduces
+              x-amazon-apigateway-integration:
+                type: aws
+                httpMethod: POST
+                uri:
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${getFolloweeCountFunction.Arn}/invocations
+                requestTemplates: *commonRequestTemplates
+                responses: *commonAmazonResponses
+              responses: *commonSwaggerResponses
+
           /getIsFollowerStatus:
             post:
               consumes: *commonConsumes
@@ -207,6 +220,20 @@ Resources:
           Properties:
             RestApiId: !Ref tweeterApi
             Path: /getFollowers
+            Method: POST
+
+  getFolloweeCountFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: getFolloweeCountFunction
+      Handler: lambda/follow/GetFolloweeCountLambda.handler
+      Policies: *commonPolicies
+      Events:
+        PostApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref tweeterApi
+            Path: /getFolloweeCount
             Method: POST
 
   getIsFollowerStatusFunction:
