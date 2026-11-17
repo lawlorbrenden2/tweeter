@@ -40,6 +40,30 @@ export class ServerFacade {
     return response.count;
   }
 
+  public async getFollowerCount(
+    request: FollowCountRequest,
+  ): Promise<number> {
+    const response = await this.clientCommunicator.doPost<
+      FollowCountRequest,
+      FollowCountResponse
+    >(request, "/getFollowerCount");
+
+    if (!response.success) {
+      const errorResponse = response as FollowCountResponse & {
+        error?: string;
+        errorMessage?: string;
+      };
+      throw new Error(
+        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
+      );
+    }
+    if (!Number.isInteger(response.count) || response.count < 0) {
+      throw new Error("No valid follower count returned");
+    }
+
+    return response.count;
+  }
+
   public async getIsFollowerStatus(
     request: IsFollowerRequest,
   ): Promise<boolean> {
