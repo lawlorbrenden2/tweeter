@@ -22,15 +22,31 @@ import {
   RegisterRequest,
   RegisterResponse,
   Status,
+  TweeterResponse,
   UnfollowRequest,
   UnfollowResponse,
   User,
-  UserDto,
 } from "tweeter-shared";
 import { ClientCommunicator } from "./ClientCommunicator";
 
 export class ServerFacade {
-  private SERVER_URL = "https://1d38tnplx5.execute-api.us-east-2.amazonaws.com/prod";
+  private checkResponseForErrors(response: TweeterResponse): void {
+    if (!response.success) {
+      const errorResponse = response as TweeterResponse & {
+        error?: string;
+        errorMessage?: string;
+      };
+      throw new Error(
+        response.message ??
+          errorResponse.error ??
+          errorResponse.errorMessage ??
+          "Unknown Server Error",
+      );
+    }
+  }
+
+  private SERVER_URL =
+    "https://1d38tnplx5.execute-api.us-east-2.amazonaws.com/prod";
 
   private clientCommunicator = new ClientCommunicator(this.SERVER_URL);
 
@@ -40,20 +56,14 @@ export class ServerFacade {
       RegisterResponse
     >(request, "/register");
 
-    if (!response.success) {
-      const errorResponse = response as RegisterResponse & {
-        error?: string;
-        errorMessage?: string;
-      };
-      throw new Error(
-        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
-      );
-    }
+    this.checkResponseForErrors(response);
 
     const user = User.fromDto(response.user);
     const authToken = AuthToken.fromDto(response.authToken);
     if (user === null || authToken === null) {
-      throw new Error("Invalid registration response: missing user or authToken");
+      throw new Error(
+        "Invalid registration response: missing user or authToken",
+      );
     }
 
     return [user, authToken];
@@ -65,15 +75,7 @@ export class ServerFacade {
       LoginResponse
     >(request, "/login");
 
-    if (!response.success) {
-      const errorResponse = response as LoginResponse & {
-        error?: string;
-        errorMessage?: string;
-      };
-      throw new Error(
-        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
-      );
-    }
+    this.checkResponseForErrors(response);
 
     const user = User.fromDto(response.user);
     const authToken = AuthToken.fromDto(response.authToken);
@@ -90,15 +92,7 @@ export class ServerFacade {
       LogoutResponse
     >(request, "/logout");
 
-    if (!response.success) {
-      const errorResponse = response as LogoutResponse & {
-        error?: string;
-        errorMessage?: string;
-      };
-      throw new Error(
-        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
-      );
-    }
+    this.checkResponseForErrors(response);
   }
 
   public async getUser(request: GetUserRequest): Promise<User | null> {
@@ -107,15 +101,7 @@ export class ServerFacade {
       GetUserResponse
     >(request, "/getUser");
 
-    if (!response.success) {
-      const errorResponse = response as GetUserResponse & {
-        error?: string;
-        errorMessage?: string;
-      };
-      throw new Error(
-        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
-      );
-    }
+    this.checkResponseForErrors(response);
 
     return User.fromDto(response.user);
   }
@@ -126,15 +112,7 @@ export class ServerFacade {
       PostStatusResponse
     >(request, "/postStatus");
 
-    if (!response.success) {
-      const errorResponse = response as PostStatusResponse & {
-        error?: string;
-        errorMessage?: string;
-      };
-      throw new Error(
-        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
-      );
-    }
+    this.checkResponseForErrors(response);
   }
 
   public async follow(request: FollowRequest): Promise<void> {
@@ -143,15 +121,7 @@ export class ServerFacade {
       FollowResponse
     >(request, "/follow");
 
-    if (!response.success) {
-      const errorResponse = response as FollowResponse & {
-        error?: string;
-        errorMessage?: string;
-      };
-      throw new Error(
-        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
-      );
-    }
+    this.checkResponseForErrors(response);
   }
 
   public async unfollow(request: UnfollowRequest): Promise<void> {
@@ -160,34 +130,16 @@ export class ServerFacade {
       UnfollowResponse
     >(request, "/unfollow");
 
-    if (!response.success) {
-      const errorResponse = response as UnfollowResponse & {
-        error?: string;
-        errorMessage?: string;
-      };
-      throw new Error(
-        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
-      );
-    }
+    this.checkResponseForErrors(response);
   }
 
-  public async getFolloweeCount(
-    request: FollowCountRequest,
-  ): Promise<number> {
+  public async getFolloweeCount(request: FollowCountRequest): Promise<number> {
     const response = await this.clientCommunicator.doPost<
       FollowCountRequest,
       FollowCountResponse
     >(request, "/getFolloweeCount");
 
-    if (!response.success) {
-      const errorResponse = response as FollowCountResponse & {
-        error?: string;
-        errorMessage?: string;
-      };
-      throw new Error(
-        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
-      );
-    }
+    this.checkResponseForErrors(response);
     if (!Number.isInteger(response.count) || response.count < 0) {
       throw new Error("No valid followee count returned");
     }
@@ -195,23 +147,13 @@ export class ServerFacade {
     return response.count;
   }
 
-  public async getFollowerCount(
-    request: FollowCountRequest,
-  ): Promise<number> {
+  public async getFollowerCount(request: FollowCountRequest): Promise<number> {
     const response = await this.clientCommunicator.doPost<
       FollowCountRequest,
       FollowCountResponse
     >(request, "/getFollowerCount");
 
-    if (!response.success) {
-      const errorResponse = response as FollowCountResponse & {
-        error?: string;
-        errorMessage?: string;
-      };
-      throw new Error(
-        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
-      );
-    }
+    this.checkResponseForErrors(response);
     if (!Number.isInteger(response.count) || response.count < 0) {
       throw new Error("No valid follower count returned");
     }
@@ -227,15 +169,7 @@ export class ServerFacade {
       IsFollowerResponse
     >(request, "/getIsFollowerStatus");
 
-    if (!response.success) {
-      const errorResponse = response as IsFollowerResponse & {
-        error?: string;
-        errorMessage?: string;
-      };
-      throw new Error(
-        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
-      );
-    }
+    this.checkResponseForErrors(response);
     if (typeof response.isFollower !== "boolean") {
       throw new Error("No follower status returned");
     }
@@ -251,15 +185,7 @@ export class ServerFacade {
       PagedStatusItemResponse
     >(request, "/getFeedItems");
 
-    if (!response.success) {
-      const errorResponse = response as PagedStatusItemResponse & {
-        error?: string;
-        errorMessage?: string;
-      };
-      throw new Error(
-        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
-      );
-    }
+    this.checkResponseForErrors(response);
     if (response.items == null) {
       throw new Error("No feed items found");
     }
@@ -276,15 +202,7 @@ export class ServerFacade {
       PagedStatusItemResponse
     >(request, "/getStoryItems");
 
-    if (!response.success) {
-      const errorResponse = response as PagedStatusItemResponse & {
-        error?: string;
-        errorMessage?: string;
-      };
-      throw new Error(
-        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
-      );
-    }
+    this.checkResponseForErrors(response);
     if (response.items == null) {
       throw new Error("No story items found");
     }
@@ -301,15 +219,7 @@ export class ServerFacade {
       PagedUserItemResponse
     >(request, "/getFollowers");
 
-    if (!response.success) {
-      const errorResponse = response as PagedUserItemResponse & {
-        error?: string;
-        errorMessage?: string;
-      };
-      throw new Error(
-        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
-      );
-    }
+    this.checkResponseForErrors(response);
     if (response.items == null) {
       throw new Error("No followers found");
     }
@@ -326,23 +236,18 @@ export class ServerFacade {
       PagedUserItemResponse
     >(request, "/getFollowees");
 
+    this.checkResponseForErrors(response);
+
     // Convert the UserDto array returned by ClientCommunicator to a User array
     const items: User[] | null =
       response.success && response.items
         ? response.items.map((dto) => User.fromDto(dto) as User)
         : null;
 
-    // Handle errors
-    if (response.success) {
-      if (items == null) {
-        throw new Error(`No followees found`);
-      } else {
-        return [items, response.hasMore];
-      }
+    if (items == null) {
+      throw new Error(`No followees found`);
     } else {
-      console.error(response);
-      const errorMsg = response.message ?? (response as any).errorMessage ?? "Unknown Server Error";
-      throw new Error(errorMsg);
+      return [items, response.hasMore];
     }
   }
 }

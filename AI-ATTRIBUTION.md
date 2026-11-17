@@ -73,3 +73,8 @@
 - Task: Add four success-path Jest integration tests calling ServerFacade and StatusService directly against the deployed API, checking registration values, follower results and counts, and story statuses.
 - Review: I inspected both test files to ensure they were testing for actual data validation rather than just checking if a generic object was returned. I also confirmed no failure case tests were written as per the constraints, and ran npm test to ensure all tests passed successfully.
 
+## 2026-11-17: tweeter-web/src/net/ServerFacade.ts, AI-ATTRIBUTION.md
+- Tool: Cline
+- Task: Refactor all 14 ServerFacade endpoint methods to share a private checkResponseForErrors helper without changing network calls, generic types, or DTO conversions. Run the tweeter-web build to verify compilation.
+- Review: I checked ServerFacade.ts to make sure duplicated logic was properly filtered out to the helper method, then ensured the tests still passed and that the app functioned properly.
+
