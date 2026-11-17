@@ -6,8 +6,11 @@ import {
   FollowResponse,
   IsFollowerRequest,
   IsFollowerResponse,
+  PagedStatusItemRequest,
+  PagedStatusItemResponse,
   PagedUserItemRequest,
   PagedUserItemResponse,
+  Status,
   UnfollowRequest,
   UnfollowResponse,
   User,
@@ -124,6 +127,31 @@ export class ServerFacade {
     }
 
     return response.isFollower;
+  }
+
+  public async getFeedItems(
+    request: PagedStatusItemRequest,
+  ): Promise<[Status[], boolean]> {
+    const response = await this.clientCommunicator.doPost<
+      PagedStatusItemRequest,
+      PagedStatusItemResponse
+    >(request, "/getFeedItems");
+
+    if (!response.success) {
+      const errorResponse = response as PagedStatusItemResponse & {
+        error?: string;
+        errorMessage?: string;
+      };
+      throw new Error(
+        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
+      );
+    }
+    if (response.items == null) {
+      throw new Error("No feed items found");
+    }
+
+    const items = response.items.map((dto) => Status.fromDto(dto) as Status);
+    return [items, response.hasMore];
   }
 
   public async getMoreFollowers(
