@@ -1,6 +1,7 @@
 // AI-assisted: see AI-ATTRIBUTION.md
 import { PagedStatusItemRequest, PagedStatusItemResponse } from "tweeter-shared";
 import { StatusService } from "../../model/service/StatusService";
+import { handleError, CORS_HEADERS } from "../../util/ServerUtil";
 
 export const handler = async (
   request: PagedStatusItemRequest,
@@ -28,17 +29,9 @@ export const handler = async (
       message: null,
       items: items,
       hasMore: hasMore,
-      headers: { "Access-Control-Allow-Origin": "*" },
+      headers: CORS_HEADERS,
     };
   } catch (error: unknown) {
-    if (
-      error instanceof Error &&
-      /^\[(bad-request|unauthorized|internal-server-error)\]/.test(
-        error.message,
-      )
-    ) {
-      throw error;
-    }
-    throw new Error("[internal-server-error]");
+    handleError(error);
   }
 };

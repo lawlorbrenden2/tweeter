@@ -1,6 +1,7 @@
 // AI-assisted: see AI-ATTRIBUTION.md
 import { LogoutRequest, LogoutResponse } from "tweeter-shared";
 import { UserService } from "../../model/service/UserService";
+import { handleError, CORS_HEADERS } from "../../util/ServerUtil";
 
 export const handler = async (
   request: LogoutRequest,
@@ -15,17 +16,9 @@ export const handler = async (
     return {
       success: true,
       message: null,
-      headers: { "Access-Control-Allow-Origin": "*" },
+      headers: CORS_HEADERS,
     };
   } catch (error: unknown) {
-    if (
-      error instanceof Error &&
-      /^\[(bad-request|unauthorized|internal-server-error)\]/.test(
-        error.message,
-      )
-    ) {
-      throw error;
-    }
-    throw new Error("[internal-server-error]");
+    handleError(error);
   }
 };

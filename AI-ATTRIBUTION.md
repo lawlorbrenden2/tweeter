@@ -78,3 +78,8 @@
 - Task: Refactor all 14 ServerFacade endpoint methods to share a private checkResponseForErrors helper without changing network calls, generic types, or DTO conversions. Run the tweeter-web build to verify compilation.
 - Review: I checked ServerFacade.ts to make sure duplicated logic was properly filtered out to the helper method, then ensured the tests still passed and that the app functioned properly.
 
+
+## 2026-11-17: tweeter-server/src/lambda/follow/FollowLambda.ts, tweeter-server/src/lambda/follow/GetFolloweeCountLambda.ts, tweeter-server/src/lambda/follow/GetFolloweesLambda.ts, tweeter-server/src/lambda/follow/GetFollowerCountLambda.ts, tweeter-server/src/lambda/follow/GetFollowersLambda.ts, tweeter-server/src/lambda/follow/GetIsFollowerStatusLambda.ts, tweeter-server/src/lambda/follow/UnfollowLambda.ts, tweeter-server/src/lambda/status/GetFeedItemsLambda.ts, tweeter-server/src/lambda/status/GetStoryItemsLambda.ts, tweeter-server/src/lambda/status/PostStatusLambda.ts, tweeter-server/src/lambda/user/GetUserLambda.ts, tweeter-server/src/lambda/user/LoginLambda.ts, tweeter-server/src/lambda/user/LogoutLambda.ts, tweeter-server/src/lambda/user/RegisterLambda.ts, tweeter-server/src/util/ServerUtil.ts (new file), AI-ATTRIBUTION.md
+- Tool: Cline
+- Task: Extract shared CORS headers and the exact existing error-handling logic into ServerUtil.ts and update all 14 Lambda handlers without changing validation, service calls, or success payloads. Run the tweeter-server build to verify compilation.
+- Review: I verified all of the lambda files called ServerUtils.ts and preserved there already existing business logic. Then I recompiled and redployed my server and then checked that the tests and the application still passed / worked.

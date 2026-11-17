@@ -1,6 +1,7 @@
 // AI-assisted: see AI-ATTRIBUTION.md
 import { FollowCountRequest, FollowCountResponse } from "tweeter-shared";
 import { FollowService } from "../../model/service/FollowService";
+import { handleError, CORS_HEADERS } from "../../util/ServerUtil";
 
 export const handler = async (
   request: FollowCountRequest,
@@ -22,17 +23,9 @@ export const handler = async (
       success: true,
       message: null,
       count: count,
-      headers: { "Access-Control-Allow-Origin": "*" },
+      headers: CORS_HEADERS,
     };
   } catch (error: unknown) {
-    if (
-      error instanceof Error &&
-      /^\[(bad-request|unauthorized|internal-server-error)\]/.test(
-        error.message,
-      )
-    ) {
-      throw error;
-    }
-    throw new Error("[internal-server-error]");
+    handleError(error);
   }
 };
