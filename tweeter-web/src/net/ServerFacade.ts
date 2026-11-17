@@ -1,5 +1,6 @@
 // AI-assisted: see AI-ATTRIBUTION.md
 import {
+  AuthToken,
   FollowCountRequest,
   FollowCountResponse,
   FollowRequest,
@@ -8,6 +9,8 @@ import {
   GetUserResponse,
   IsFollowerRequest,
   IsFollowerResponse,
+  LoginRequest,
+  LoginResponse,
   PagedStatusItemRequest,
   PagedStatusItemResponse,
   PagedUserItemRequest,
@@ -26,6 +29,31 @@ export class ServerFacade {
   private SERVER_URL = "https://1d38tnplx5.execute-api.us-east-2.amazonaws.com/prod";
 
   private clientCommunicator = new ClientCommunicator(this.SERVER_URL);
+
+  public async login(request: LoginRequest): Promise<[User, AuthToken]> {
+    const response = await this.clientCommunicator.doPost<
+      LoginRequest,
+      LoginResponse
+    >(request, "/login");
+
+    if (!response.success) {
+      const errorResponse = response as LoginResponse & {
+        error?: string;
+        errorMessage?: string;
+      };
+      throw new Error(
+        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
+      );
+    }
+
+    const user = User.fromDto(response.user);
+    const authToken = AuthToken.fromDto(response.authToken);
+    if (user === null || authToken === null) {
+      throw new Error("Invalid login response: missing user or authToken");
+    }
+
+    return [user, authToken];
+  }
 
   public async getUser(request: GetUserRequest): Promise<User | null> {
     const response = await this.clientCommunicator.doPost<
