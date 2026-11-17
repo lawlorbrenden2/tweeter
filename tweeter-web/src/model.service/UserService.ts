@@ -1,6 +1,6 @@
 // AI-assisted: see AI-ATTRIBUTION.md
 import { Buffer } from "buffer";
-import { AuthToken, User, FakeData, GetUserRequest, LoginRequest } from "tweeter-shared";
+import { AuthToken, User, GetUserRequest, LoginRequest, RegisterRequest } from "tweeter-shared";
 import { Service } from "./Service";
 import { ServerFacade } from "../net/ServerFacade";
 
@@ -27,18 +27,20 @@ export class UserService implements Service {
     userImageBytes: Uint8Array,
     imageFileExtension: string,
   ): Promise<[User, AuthToken]> {
-    // Not neded now, but will be needed when you make the request to the server in milestone 3
     const imageStringBase64: string =
       Buffer.from(userImageBytes).toString("base64");
 
-    // TODO: Replace with the result of calling the server
-    const user = FakeData.instance.firstUser;
+    const request: RegisterRequest = {
+      token: "",
+      firstName,
+      lastName,
+      alias,
+      password,
+      userImageBytes: imageStringBase64,
+      imageFileExtension,
+    };
 
-    if (user === null) {
-      throw new Error("Invalid registration");
-    }
-
-    return [user, FakeData.instance.authToken];
+    return await this.serverFacade.register(request);
   }
 
   public async login(

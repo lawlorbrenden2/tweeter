@@ -3,6 +3,22 @@ import { AuthTokenDto, FakeData, UserDto } from "tweeter-shared";
 import { Service } from "./Service";
 
 export class UserService implements Service {
+  public async register(
+    firstName: string,
+    lastName: string,
+    alias: string,
+    password: string,
+    userImageBytes: string,
+    imageFileExtension: string,
+  ): Promise<[UserDto, AuthTokenDto]> {
+    const user = FakeData.instance.firstUser;
+    if (user === null) {
+      throw new Error("[internal-server-error] Invalid registration");
+    }
+
+    return [user.dto, FakeData.instance.authToken.dto];
+  }
+
   public async login(
     alias: string,
     password: string,

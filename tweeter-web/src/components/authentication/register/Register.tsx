@@ -28,8 +28,7 @@ const Register = () => {
     navigate: navigate,
     displayErrorMessage: displayErrorMessage,
   };
-  const presenter = new RegisterPresenter(listener);
-
+  const [presenter] = useState(() => new RegisterPresenter(listener));
   const checkSubmitButtonStatus = (): boolean => {
     return !firstName || !lastName || !alias || !password || !imageUrl;
   };

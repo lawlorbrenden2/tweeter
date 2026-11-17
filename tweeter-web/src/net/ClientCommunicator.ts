@@ -1,5 +1,5 @@
 // AI-assisted: see AI-ATTRIBUTION.md
-import { LoginRequest, TweeterRequest, TweeterResponse } from "tweeter-shared";
+import { LoginRequest, RegisterRequest, TweeterRequest, TweeterResponse } from "tweeter-shared";
 
 export class ClientCommunicator {
   private SERVER_URL: string;
@@ -8,7 +8,7 @@ export class ClientCommunicator {
     this.SERVER_URL = SERVER_URL;
   }
 
-  public async doPost<REQ extends TweeterRequest | LoginRequest, RES extends TweeterResponse>(
+  public async doPost<REQ extends TweeterRequest | LoginRequest| RegisterRequest, RES extends TweeterResponse>(
     req: REQ | undefined,
     endpoint: string,
     headers?: Headers,

@@ -17,6 +17,8 @@ import {
   PagedUserItemResponse,
   PostStatusRequest,
   PostStatusResponse,
+  RegisterRequest,
+  RegisterResponse,
   Status,
   UnfollowRequest,
   UnfollowResponse,
@@ -29,6 +31,31 @@ export class ServerFacade {
   private SERVER_URL = "https://1d38tnplx5.execute-api.us-east-2.amazonaws.com/prod";
 
   private clientCommunicator = new ClientCommunicator(this.SERVER_URL);
+
+  public async register(request: RegisterRequest): Promise<[User, AuthToken]> {
+    const response = await this.clientCommunicator.doPost<
+      RegisterRequest,
+      RegisterResponse
+    >(request, "/register");
+
+    if (!response.success) {
+      const errorResponse = response as RegisterResponse & {
+        error?: string;
+        errorMessage?: string;
+      };
+      throw new Error(
+        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
+      );
+    }
+
+    const user = User.fromDto(response.user);
+    const authToken = AuthToken.fromDto(response.authToken);
+    if (user === null || authToken === null) {
+      throw new Error("Invalid registration response: missing user or authToken");
+    }
+
+    return [user, authToken];
+  }
 
   public async login(request: LoginRequest): Promise<[User, AuthToken]> {
     const response = await this.clientCommunicator.doPost<
