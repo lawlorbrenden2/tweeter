@@ -154,6 +154,31 @@ export class ServerFacade {
     return [items, response.hasMore];
   }
 
+  public async getStoryItems(
+    request: PagedStatusItemRequest,
+  ): Promise<[Status[], boolean]> {
+    const response = await this.clientCommunicator.doPost<
+      PagedStatusItemRequest,
+      PagedStatusItemResponse
+    >(request, "/getStoryItems");
+
+    if (!response.success) {
+      const errorResponse = response as PagedStatusItemResponse & {
+        error?: string;
+        errorMessage?: string;
+      };
+      throw new Error(
+        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
+      );
+    }
+    if (response.items == null) {
+      throw new Error("No story items found");
+    }
+
+    const items = response.items.map((dto) => Status.fromDto(dto) as Status);
+    return [items, response.hasMore];
+  }
+
   public async getMoreFollowers(
     request: PagedUserItemRequest,
   ): Promise<[User[], boolean]> {
