@@ -251,6 +251,19 @@ Resources:
                 responses: *commonAmazonResponses
               responses: *commonSwaggerResponses
 
+          /logout:
+            post:
+              consumes: *commonConsumes
+              produces: *commonProduces
+              x-amazon-apigateway-integration:
+                type: aws
+                httpMethod: POST
+                uri:
+                  Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${logoutFunction.Arn}/invocations
+                requestTemplates: *commonRequestTemplates
+                responses: *commonAmazonResponses
+              responses: *commonSwaggerResponses
+
           /register:
             post:
               consumes: *commonConsumes
@@ -304,6 +317,20 @@ Resources:
   #
   # Web API Lambda functions
   #
+
+  logoutFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: logoutFunction
+      Handler: lambda/user/LogoutLambda.handler
+      Policies: *commonPolicies
+      Events:
+        PostApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref tweeterApi
+            Path: /logout
+            Method: POST
 
   ##### TODO: Change "userGetFunction" to the actual function name.
   ##### It must match the function name in the "Endpoint definitons" section above.

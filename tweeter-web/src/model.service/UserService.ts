@@ -1,6 +1,6 @@
 // AI-assisted: see AI-ATTRIBUTION.md
 import { Buffer } from "buffer";
-import { AuthToken, User, GetUserRequest, LoginRequest, RegisterRequest } from "tweeter-shared";
+import { AuthToken, User, GetUserRequest, LoginRequest, LogoutRequest, RegisterRequest } from "tweeter-shared";
 import { Service } from "./Service";
 import { ServerFacade } from "../net/ServerFacade";
 
@@ -31,7 +31,6 @@ export class UserService implements Service {
       Buffer.from(userImageBytes).toString("base64");
 
     const request: RegisterRequest = {
-      token: "",
       firstName,
       lastName,
       alias,
@@ -51,8 +50,8 @@ export class UserService implements Service {
     return await this.serverFacade.login(request);
   }
 
-    public async logout(authToken: AuthToken): Promise<void> {
-    // Pause so we can see the logging out message. Delete when the call to the server is implemented.
-    await new Promise((res) => setTimeout(res, 1000));
-  };
+  public async logout(authToken: AuthToken): Promise<void> {
+    const request: LogoutRequest = { token: authToken.token };
+    await this.serverFacade.logout(request);
+  }
 }

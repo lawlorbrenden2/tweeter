@@ -31,6 +31,10 @@ export class UserService implements Service {
     return [user.dto, FakeData.instance.authToken.dto];
   }
 
+  public async logout(token: string): Promise<void> {
+    return;
+  }
+
   public async getUser(token: string, userAlias: string): Promise<UserDto | null> {
     return FakeData.instance.findUserByAlias(userAlias)?.dto ?? null;
   }

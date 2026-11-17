@@ -11,6 +11,8 @@ import {
   IsFollowerResponse,
   LoginRequest,
   LoginResponse,
+  LogoutRequest,
+  LogoutResponse,
   PagedStatusItemRequest,
   PagedStatusItemResponse,
   PagedUserItemRequest,
@@ -80,6 +82,23 @@ export class ServerFacade {
     }
 
     return [user, authToken];
+  }
+
+  public async logout(request: LogoutRequest): Promise<void> {
+    const response = await this.clientCommunicator.doPost<
+      LogoutRequest,
+      LogoutResponse
+    >(request, "/logout");
+
+    if (!response.success) {
+      const errorResponse = response as LogoutResponse & {
+        error?: string;
+        errorMessage?: string;
+      };
+      throw new Error(
+        response.message ?? errorResponse.error ?? errorResponse.errorMessage ?? "Unknown Server Error",
+      );
+    }
   }
 
   public async getUser(request: GetUserRequest): Promise<User | null> {
