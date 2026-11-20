@@ -1,8 +1,15 @@
 // AI-assisted: see AI-ATTRIBUTION.md
 import { AuthTokenDto, FakeData, UserDto } from "tweeter-shared";
 import { Service } from "./Service";
+import { DAOFactory } from "../dao/DAOFactory";
 
 export class UserService implements Service {
+
+  constructor(factory: DAOFactory) {
+    this.userDAO = factory.getUserDAO();
+    this.imageDAO = factory.getImageDAO();
+    this.authDAO = factory.getAuthDAO();
+  }
   public async register(
     firstName: string,
     lastName: string,

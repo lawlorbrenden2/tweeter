@@ -1,9 +1,18 @@
 // AI-assisted: see AI-ATTRIBUTION.md
 import { User, FakeData, UserDto } from "tweeter-shared";
 import { Service } from "./Service";
+import { DAOFactory } from "../dao/DAOFactory";
 
 
 export class FollowService implements Service {
+
+  constructor(factory: DAOFactory) {
+    this.followDAO: factory.getFollowDAO();
+    this.userDAO = factory.getUserDAO();
+    this.authDAO = factory.getAuthDAO();
+
+  }
+  
   public async getFollowees(
     token: string,
     userAlias: string,
