@@ -103,3 +103,8 @@
 - Tool: Cline
 - Task: Implement DynamoUserDAO against the users table using the shared DynamoDB document client, including user storage and retrieval, atomic follower/followee count updates, and count reads with zero defaults. Validate targeted TypeScript compilation without changing tests, services, handlers, or shared/client modules.
 - Review: Verified DynamoUserDAO.ts properly implemented UserDAO.ts.
+
+## 2026-11-22: tweeter-server/src/model/service/UserService.ts, AI-ATTRIBUTION.md
+- Tool: Cline
+- Task: Replace UserService FakeData usage with injected user, auth, and image DAOs and bcryptjs password hashing. Preserve aliases and unauthorized login errors, and enforce a refreshed 30-minute inactivity timeout without adding test files or dependencies.
+- Review: Reviewed UserService.ts to make sure FakeData was gone, database operations were implemented properly, and bcryptjs was hashed properly.
