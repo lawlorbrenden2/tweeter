@@ -88,3 +88,8 @@
 - Tool: Cline
 - Task: Define five on-demand DynamoDB tables and a generated-name S3 profile-image bucket with public object reads. Scope the shared Lambda IAM permissions to the five tables, follows_index, and bucket object reads/writes without changing API or Lambda settings.
 - Review: I verified the results of sam validate and looked over the schema in template.json to make sure that the schema definition followed my definitions.
+
+## 2026-11-22: tweeter-server/src/model/dao/s3/S3ImageDAO.ts (new file), tweeter-server/template.yaml, AI-ATTRIBUTION.md
+- Tool: Cline
+- Task: Implement S3ImageDAO with environment-based bucket and region configuration, base64 image decoding, extension-based content types, and public object URLs without object ACLs. Expose the generated profile-image bucket name to all Lambda functions and validate without adding unit test files.
+- Review: I inspected S3ImageDAO.ts and FollowService.ts to make sure Cline followed all of the conventions and implemented the files correctly. I noticed one minor error in the FollowService constructor which I fixed myself.

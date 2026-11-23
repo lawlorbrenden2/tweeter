@@ -14,6 +14,9 @@ Globals:
       - !Ref tweeterLayer
     Timeout: 30
     MemorySize: 128
+    Environment:
+      Variables:
+        PROFILE_IMAGES_BUCKET: !Ref profileImagesBucket
 
 
 #

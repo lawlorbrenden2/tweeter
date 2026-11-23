@@ -7,7 +7,7 @@ import { DAOFactory } from "../dao/DAOFactory";
 export class FollowService implements Service {
 
   constructor(factory: DAOFactory) {
-    this.followDAO: factory.getFollowDAO();
+    this.followDAO = factory.getFollowDAO();
     this.userDAO = factory.getUserDAO();
     this.authDAO = factory.getAuthDAO();
 
