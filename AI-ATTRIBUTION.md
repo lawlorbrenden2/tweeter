@@ -93,3 +93,9 @@
 - Tool: Cline
 - Task: Implement S3ImageDAO with environment-based bucket and region configuration, base64 image decoding, extension-based content types, and public object URLs without object ACLs. Expose the generated profile-image bucket name to all Lambda functions and validate without adding unit test files.
 - Review: I inspected S3ImageDAO.ts and FollowService.ts to make sure Cline followed all of the conventions and implemented the files correctly. I noticed one minor error in the FollowService constructor which I fixed myself.
+
+## 2026-11-22: tweeter-server/src/model/dao/dynamo/DynamoClient.ts (new file), tweeter-server/src/model/dao/dynamo/DynamoAuthDAO.ts (new file), AI-ATTRIBUTION.md
+- Tool: Cline
+- Task: Add a shared region-configured DynamoDB document client and implement AuthDAO token put, get, update, and delete operations against authtokens, escaping the timestamp attribute for updates. Validate TypeScript compilation without changing tests, services, handlers, or shared/client modules.
+- Review: I checked both DynamoClient.ts and DynamoAuthDAO.ts to ensure the table name (authtokens), key (token), and null handling were all implemented correctly.
+ 
