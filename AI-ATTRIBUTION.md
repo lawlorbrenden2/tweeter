@@ -98,4 +98,8 @@
 - Tool: Cline
 - Task: Add a shared region-configured DynamoDB document client and implement AuthDAO token put, get, update, and delete operations against authtokens, escaping the timestamp attribute for updates. Validate TypeScript compilation without changing tests, services, handlers, or shared/client modules.
 - Review: I checked both DynamoClient.ts and DynamoAuthDAO.ts to ensure the table name (authtokens), key (token), and null handling were all implemented correctly.
- 
+
+## 2026-11-22: tweeter-server/src/model/dao/dynamo/DynamoUserDAO.ts (new file), AI-ATTRIBUTION.md
+- Tool: Cline
+- Task: Implement DynamoUserDAO against the users table using the shared DynamoDB document client, including user storage and retrieval, atomic follower/followee count updates, and count reads with zero defaults. Validate targeted TypeScript compilation without changing tests, services, handlers, or shared/client modules.
+- Review: Verified DynamoUserDAO.ts properly implemented UserDAO.ts.
