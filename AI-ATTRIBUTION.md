@@ -83,3 +83,8 @@
 - Tool: Cline
 - Task: Extract shared CORS headers and the exact existing error-handling logic into ServerUtil.ts and update all 14 Lambda handlers without changing validation, service calls, or success payloads. Run the tweeter-server build to verify compilation.
 - Review: I verified all of the lambda files called ServerUtils.ts and preserved there already existing business logic. Then I recompiled and redployed my server and then checked that the tests and the application still passed / worked.
+
+## 2026-11-22: tweeter-server/template.yaml, AI-ATTRIBUTION.md
+- Tool: Cline
+- Task: Define five on-demand DynamoDB tables and a generated-name S3 profile-image bucket with public object reads. Scope the shared Lambda IAM permissions to the five tables, follows_index, and bucket object reads/writes without changing API or Lambda settings.
+- Review: I verified the results of sam validate and looked over the schema in template.json to make sure that the schema definition followed my definitions.
