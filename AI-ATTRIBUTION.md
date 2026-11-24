@@ -113,3 +113,8 @@
 - Tool: Cline
 - Task: Implement DynamoFollowDAO using the shared DynamoDB client with composite-key follow operations and paginated followee/follower queries against follows and follows_index. Store only unchanged handles and validate targeted TypeScript compilation without modifying tests or protected files.
 - Review: Verified that getPageOfFollowers queries the follows_index GSI while getPageOfFollowees queries the base follows table, and that both build ExclusiveStartKey with both follower_handle and followee_handle. Confirmed aliases are stored unchanged and targeted TypeScript compilation passed.
+
+## 2026-11-23: tweeter-server/src/model/service/FollowService.ts, AI-ATTRIBUTION.md
+- Tool: Cline
+- Task: Replace FollowService FakeData usage with injected follow, user, and auth DAOs, including refreshed 30-minute token validation, alias-preserving pagination, and idempotent follow/unfollow count updates. Preserve public signatures and validate targeted TypeScript compilation without changing test files or adding dependencies.
+- Review: Reviewed FollowService.ts to make sure FakeData was gone, database operations were implemented properly, and bcryptjs was hashed properly.
