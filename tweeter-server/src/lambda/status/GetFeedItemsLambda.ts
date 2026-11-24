@@ -2,6 +2,7 @@
 import { PagedStatusItemRequest, PagedStatusItemResponse } from "tweeter-shared";
 import { StatusService } from "../../model/service/StatusService";
 import { handleError, CORS_HEADERS } from "../../util/ServerUtil";
+import { DynamoDAOFactory } from "../../model/dao/dynamo/DynamoDAOFactory";
 
 export const handler = async (
   request: PagedStatusItemRequest,
@@ -16,7 +17,7 @@ export const handler = async (
     throw new Error("[bad-request] pageSize must be a positive integer");
   }
   try {
-    const statusService = new StatusService();
+    const statusService = new StatusService(new DynamoDAOFactory());
     const [items, hasMore] = await statusService.getFeedItems(
       request.token,
       request.userAlias,

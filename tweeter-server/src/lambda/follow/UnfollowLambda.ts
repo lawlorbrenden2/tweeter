@@ -2,6 +2,7 @@
 import { UnfollowRequest, UnfollowResponse } from "tweeter-shared";
 import { FollowService } from "../../model/service/FollowService";
 import { handleError, CORS_HEADERS } from "../../util/ServerUtil";
+import { DynamoDAOFactory } from "../../model/dao/dynamo/DynamoDAOFactory";
 
 export const handler = async (
   request: UnfollowRequest,
@@ -13,7 +14,7 @@ export const handler = async (
     throw new Error("[bad-request] missing userToUnfollow");
   }
   try {
-    const followService = new FollowService();
+    const followService = new FollowService(new DynamoDAOFactory());
     await followService.unfollow(request.token, request.userToUnfollow);
 
     return {
