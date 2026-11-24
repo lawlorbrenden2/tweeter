@@ -2,6 +2,7 @@
 import { PostStatusRequest, PostStatusResponse } from "tweeter-shared";
 import { StatusService } from "../../model/service/StatusService";
 import { handleError, CORS_HEADERS } from "../../util/ServerUtil";
+import { DynamoDAOFactory } from "../../model/dao/dynamo/DynamoDAOFactory";
 
 export const handler = async (
   request: PostStatusRequest,
@@ -13,7 +14,7 @@ export const handler = async (
     throw new Error("[bad-request] missing status");
   }
   try {
-    const statusService = new StatusService();
+    const statusService = new StatusService(new DynamoDAOFactory());
     await statusService.postStatus(request.token, request.status);
 
     return {
