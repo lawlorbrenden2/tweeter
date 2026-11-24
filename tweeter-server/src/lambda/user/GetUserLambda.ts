@@ -2,6 +2,7 @@
 import { GetUserRequest, GetUserResponse } from "tweeter-shared";
 import { UserService } from "../../model/service/UserService";
 import { handleError, CORS_HEADERS } from "../../util/ServerUtil";
+import { DynamoDAOFactory } from "../../model/dao/dynamo/DynamoDAOFactory";
 
 export const handler = async (
   request: GetUserRequest,
@@ -13,7 +14,7 @@ export const handler = async (
     throw new Error("[bad-request] missing userAlias");
   }
   try {
-    const userService = new UserService();
+    const userService = new UserService(new DynamoDAOFactory());
     const user = await userService.getUser(request.token, request.userAlias);
 
     return {
