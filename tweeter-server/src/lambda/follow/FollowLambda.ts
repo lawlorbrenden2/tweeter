@@ -2,6 +2,7 @@
 import { FollowRequest, FollowResponse } from "tweeter-shared";
 import { FollowService } from "../../model/service/FollowService";
 import { handleError, CORS_HEADERS } from "../../util/ServerUtil";
+import { DynamoDAOFactory } from "../../model/dao/dynamo/DynamoDAOFactory";
 
 export const handler = async (
   request: FollowRequest,
@@ -13,7 +14,7 @@ export const handler = async (
     throw new Error("[bad-request] missing userToFollow");
   }
   try {
-    const followService = new FollowService();
+    const followService = new FollowService(new DynamoDAOFactory());
     await followService.follow(request.token, request.userToFollow);
 
     return {
