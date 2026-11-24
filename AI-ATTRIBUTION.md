@@ -108,3 +108,8 @@
 - Tool: Cline
 - Task: Replace UserService FakeData usage with injected user, auth, and image DAOs and bcryptjs password hashing. Preserve aliases and unauthorized login errors, and enforce a refreshed 30-minute inactivity timeout without adding test files or dependencies.
 - Review: Reviewed UserService.ts to make sure FakeData was gone, database operations were implemented properly, and bcryptjs was hashed properly.
+
+## 2026-11-23: tweeter-server/src/model/dao/dynamo/DynamoFollowDAO.ts (new file), AI-ATTRIBUTION.md
+- Tool: Cline
+- Task: Implement DynamoFollowDAO using the shared DynamoDB client with composite-key follow operations and paginated followee/follower queries against follows and follows_index. Store only unchanged handles and validate targeted TypeScript compilation without modifying tests or protected files.
+- Review: Verified that getPageOfFollowers queries the follows_index GSI while getPageOfFollowees queries the base follows table, and that both build ExclusiveStartKey with both follower_handle and followee_handle. Confirmed aliases are stored unchanged and targeted TypeScript compilation passed.
