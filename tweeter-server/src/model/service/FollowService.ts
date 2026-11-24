@@ -4,18 +4,17 @@ import { Service } from "./Service";
 import { DAOFactory } from "../dao/DAOFactory";
 import { FollowDAO } from "../dao/FollowDAO";
 import { UserDAO } from "../dao/UserDAO";
-import { AuthDAO } from "../dao/AuthDAO";
+import { AuthService } from "./AuthService";
 
 export class FollowService implements Service {
   private readonly followDAO: FollowDAO;
   private readonly userDAO: UserDAO;
-  private readonly authDAO: AuthDAO;
-  private readonly authTokenTimeout = 30 * 60 * 1000;
+  private readonly authService: AuthService;
 
   constructor(factory: DAOFactory) {
     this.followDAO = factory.getFollowDAO();
     this.userDAO = factory.getUserDAO();
-    this.authDAO = factory.getAuthDAO();
+    this.authService = new AuthService(factory.getAuthDAO());
   }
   
   public async getFollowees(
@@ -24,7 +23,7 @@ export class FollowService implements Service {
     pageSize: number,
     lastItem: UserDto | null,
   ): Promise<[UserDto[], boolean]> {
-    await this.validateToken(token);
+    await this.authService.validateToken(token);
     const [aliases, hasMore] = await this.followDAO.getPageOfFollowees(
       userAlias,
       pageSize,
@@ -41,7 +40,7 @@ export class FollowService implements Service {
     pageSize: number,
     lastItem: UserDto | null,
   ): Promise<[UserDto[], boolean]> {
-    await this.validateToken(token);
+    await this.authService.validateToken(token);
     const [aliases, hasMore] = await this.followDAO.getPageOfFollowers(
       userAlias,
       pageSize,
@@ -57,7 +56,7 @@ export class FollowService implements Service {
     userAlias: string,
     selectedUserAlias: string,
   ): Promise<boolean> {
-    await this.validateToken(token);
+    await this.authService.validateToken(token);
     return this.followDAO.getFollow(userAlias, selectedUserAlias);
   }
 
@@ -65,7 +64,7 @@ export class FollowService implements Service {
     token: string,
     userAlias: string,
   ): Promise<number> {
-    await this.validateToken(token);
+    await this.authService.validateToken(token);
     return this.userDAO.getFolloweeCount(userAlias);
   }
 
@@ -73,7 +72,7 @@ export class FollowService implements Service {
     token: string,
     userAlias: string,
   ): Promise<number> {
-    await this.validateToken(token);
+    await this.authService.validateToken(token);
     return this.userDAO.getFollowerCount(userAlias);
   }
 
@@ -81,7 +80,7 @@ export class FollowService implements Service {
     token: string,
     userToFollow: string,
   ): Promise<[followerCount: number, followeeCount: number]> {
-    const followerAlias = await this.validateToken(token);
+    const followerAlias = await this.authService.validateToken(token);
     if (!(await this.followDAO.getFollow(followerAlias, userToFollow))) {
       await this.followDAO.putFollow(followerAlias, userToFollow);
       await this.userDAO.updateFolloweeCount(followerAlias, 1);
@@ -98,7 +97,7 @@ export class FollowService implements Service {
     token: string,
     userToUnfollow: string,
   ): Promise<[followerCount: number, followeeCount: number]> {
-    const followerAlias = await this.validateToken(token);
+    const followerAlias = await this.authService.validateToken(token);
     if (await this.followDAO.getFollow(followerAlias, userToUnfollow)) {
       await this.followDAO.deleteFollow(followerAlias, userToUnfollow);
       await this.userDAO.updateFolloweeCount(followerAlias, -1);
@@ -109,21 +108,5 @@ export class FollowService implements Service {
     const followeeCount = await this.userDAO.getFolloweeCount(userToUnfollow);
 
     return [followerCount, followeeCount];
-  }
-
-  private async validateToken(token: string): Promise<string> {
-    const record = await this.authDAO.getAuthToken(token);
-    if (record === null) {
-      throw new Error("[unauthorized] Invalid auth token");
-    }
-
-    const now = Date.now();
-    if (now - record.authToken.timestamp > this.authTokenTimeout) {
-      await this.authDAO.deleteAuthToken(token);
-      throw new Error("[unauthorized] Auth token expired");
-    }
-
-    await this.authDAO.updateAuthToken(token, now);
-    return record.alias;
   }
 }

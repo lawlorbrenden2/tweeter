@@ -7,17 +7,19 @@ import { DAOFactory } from "../dao/DAOFactory";
 import { UserDAO } from "../dao/UserDAO";
 import { AuthDAO } from "../dao/AuthDAO";
 import { ImageDAO } from "../dao/ImageDAO";
+import { AuthService } from "./AuthService";
 
 export class UserService implements Service {
   private readonly userDAO: UserDAO;
   private readonly authDAO: AuthDAO;
   private readonly imageDAO: ImageDAO;
-  private readonly authTokenTimeout = 30 * 60 * 1000;
+  private readonly authService: AuthService;
 
   constructor(factory: DAOFactory) {
     this.userDAO = factory.getUserDAO();
     this.imageDAO = factory.getImageDAO();
     this.authDAO = factory.getAuthDAO();
+    this.authService = new AuthService(this.authDAO);
   }
   public async register(
     firstName: string,
@@ -61,18 +63,7 @@ export class UserService implements Service {
   }
 
   public async getUser(token: string, userAlias: string): Promise<UserDto | null> {
-    const record = await this.authDAO.getAuthToken(token);
-    if (record === null) {
-      throw new Error("[unauthorized] Invalid auth token");
-    }
-
-    const now = Date.now();
-    if (now - record.authToken.timestamp > this.authTokenTimeout) {
-      await this.authDAO.deleteAuthToken(token);
-      throw new Error("[unauthorized] Auth token expired");
-    }
-
-    await this.authDAO.updateAuthToken(token, now);
+    await this.authService.validateToken(token);
     const userRecord = await this.userDAO.getUser(userAlias);
     return userRecord ? userRecord.user : null;
   }

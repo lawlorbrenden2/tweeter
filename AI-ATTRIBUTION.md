@@ -133,3 +133,8 @@
 - Tool: Cline
 - Task: Implement the named-export DynamoDAOFactory adhering to DAOFactory, returning new concrete DynamoDB and S3 DAO instances on each call. Validate targeted TypeScript compilation without modifying DAO interfaces, implementations, services, handlers, templates, shared/client modules, or tests.
 - Review: Verified the DynamoDAOFactory properly implements the DAOFactory and returns all the DAOs.
+
+## 2026-11-23: tweeter-server/src/model/service/AuthService.ts (new file), tweeter-server/src/model/service/UserService.ts, tweeter-server/src/model/service/FollowService.ts, tweeter-server/src/model/service/StatusService.ts, AI-ATTRIBUTION.md
+- Tool: Cline
+- Task: Extract shared auth-token validation into AuthService and delegate validation from UserService, FollowService, and StatusService while preserving public signatures, errors, and inactivity-timeout behavior. Confirm the existing DynamoDAOFactory and validate targeted TypeScript compilation without modifying DAOs, handlers, templates, shared/client modules, or tests.
+- Review: Verified all three service classes (and the new one) that the duplicated logic had been taken out.
