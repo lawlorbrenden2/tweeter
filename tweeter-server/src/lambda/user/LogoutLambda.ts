@@ -2,6 +2,7 @@
 import { LogoutRequest, LogoutResponse } from "tweeter-shared";
 import { UserService } from "../../model/service/UserService";
 import { handleError, CORS_HEADERS } from "../../util/ServerUtil";
+import { DynamoDAOFactory } from "../../model/dao/dynamo/DynamoDAOFactory";
 
 export const handler = async (
   request: LogoutRequest,
@@ -10,7 +11,7 @@ export const handler = async (
     throw new Error("[bad-request] missing token");
   }
   try {
-    const userService = new UserService();
+    const userService = new UserService(new DynamoDAOFactory())
     await userService.logout(request.token);
 
     return {
