@@ -88,29 +88,13 @@ export class DynamoStatusDAO implements StatusDAO {
     pageSize: number,
     lastItemTimestamp?: number,
   ): Promise<[StatusDto[], boolean]> {
-    const result = await dynamoClient.send(
-      new QueryCommand({
-        TableName: this.storyTableName,
-        KeyConditionExpression: "sender_alias = :userAlias",
-        ExpressionAttributeValues: { ":userAlias": userAlias },
-        ScanIndexForward: false,
-        Limit: pageSize,
-        ExclusiveStartKey:
-          lastItemTimestamp !== undefined
-            ? {
-                sender_alias: userAlias,
-                timestamp: lastItemTimestamp,
-              }
-            : undefined,
-      }),
+    return this.getPageOfStatuses(
+      this.storyTableName,
+      "sender_alias",
+      userAlias,
+      pageSize,
+      lastItemTimestamp,
     );
-
-    const items: StatusDto[] = (result.Items ?? []).map((item) => ({
-      post: item.post,
-      user: item.user,
-      timestamp: item.timestamp,
-    }));
-    return [items, Boolean(result.LastEvaluatedKey)];
   }
 
   async getPageOfFeed(
@@ -118,17 +102,33 @@ export class DynamoStatusDAO implements StatusDAO {
     pageSize: number,
     lastItemTimestamp?: number,
   ): Promise<[StatusDto[], boolean]> {
+    return this.getPageOfStatuses(
+      this.feedTableName,
+      "receiver_alias",
+      userAlias,
+      pageSize,
+      lastItemTimestamp,
+    );
+  }
+
+  private async getPageOfStatuses(
+    tableName: string,
+    partitionKeyName: string,
+    userAlias: string,
+    pageSize: number,
+    lastItemTimestamp?: number,
+  ): Promise<[StatusDto[], boolean]> {
     const result = await dynamoClient.send(
       new QueryCommand({
-        TableName: this.feedTableName,
-        KeyConditionExpression: "receiver_alias = :userAlias",
+        TableName: tableName,
+        KeyConditionExpression: `${partitionKeyName} = :userAlias`,
         ExpressionAttributeValues: { ":userAlias": userAlias },
         ScanIndexForward: false,
         Limit: pageSize,
         ExclusiveStartKey:
           lastItemTimestamp !== undefined
             ? {
-                receiver_alias: userAlias,
+                [partitionKeyName]: userAlias,
                 timestamp: lastItemTimestamp,
               }
             : undefined,
