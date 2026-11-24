@@ -1,6 +1,7 @@
 // AI-assisted: see AI-ATTRIBUTION.md
 import { RegisterRequest, RegisterResponse } from "tweeter-shared";
 import { UserService } from "../../model/service/UserService";
+import { DynamoDAOFactory } from "../../model/dao/dynamo/DynamoDAOFactory";
 import { handleError, CORS_HEADERS } from "../../util/ServerUtil";
 
 export const handler = async (
@@ -25,7 +26,7 @@ export const handler = async (
     throw new Error("[bad-request] missing imageFileExtension");
   }
   try {
-    const userService = new UserService();
+    const userService = new UserService(new DynamoDAOFactory());
     const [user, authToken] = await userService.register(
       request.firstName,
       request.lastName,

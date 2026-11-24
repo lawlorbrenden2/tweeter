@@ -1,6 +1,7 @@
 // AI-assisted: see AI-ATTRIBUTION.md
 import { LoginRequest, LoginResponse } from "tweeter-shared";
 import { UserService } from "../../model/service/UserService";
+import { DynamoDAOFactory } from "../../model/dao/dynamo/DynamoDAOFactory";
 import { handleError, CORS_HEADERS } from "../../util/ServerUtil";
 
 export const handler = async (
@@ -13,7 +14,7 @@ export const handler = async (
     throw new Error("[bad-request] missing password");
   }
   try {
-    const userService = new UserService();
+    const userService = new UserService(new DynamoDAOFactory());
     const [user, authToken] = await userService.login(request.alias, request.password);
 
     return {

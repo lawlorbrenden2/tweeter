@@ -138,3 +138,8 @@
 - Tool: Cline
 - Task: Extract shared auth-token validation into AuthService and delegate validation from UserService, FollowService, and StatusService while preserving public signatures, errors, and inactivity-timeout behavior. Confirm the existing DynamoDAOFactory and validate targeted TypeScript compilation without modifying DAOs, handlers, templates, shared/client modules, or tests.
 - Review: Verified all three service classes (and the new one) that the duplicated logic had been taken out.
+
+## 2026-11-23: tweeter-server/src/lambda/user/RegisterLambda.ts, tweeter-server/src/lambda/user/LoginLambda.ts, AI-ATTRIBUTION.md
+- Tool: Cline
+- Task: Wire DynamoDAOFactory into RegisterLambda and LoginLambda by injecting it into UserService, preserving request validation, ServerUtil CORS/error handling, and response structures. Validate targeted TypeScript compilation without changing other handlers, services, DAOs, templates, client/shared modules, or tests.
+- Review: Reviewed RegisterLambda and LoginLambda to ensure they properly instatiated DynamoDAOFactory.
