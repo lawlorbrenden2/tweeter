@@ -2,6 +2,7 @@
 import { IsFollowerRequest, IsFollowerResponse } from "tweeter-shared";
 import { FollowService } from "../../model/service/FollowService";
 import { handleError, CORS_HEADERS } from "../../util/ServerUtil";
+import { DynamoDAOFactory } from "../../model/dao/dynamo/DynamoDAOFactory";
 
 export const handler = async (
   request: IsFollowerRequest,
@@ -17,7 +18,7 @@ export const handler = async (
   }
 
   try {
-    const followService = new FollowService();
+    const followService = new FollowService(new DynamoDAOFactory());
     const isFollower = await followService.getIsFollowerStatus(
       request.token,
       request.userAlias,
