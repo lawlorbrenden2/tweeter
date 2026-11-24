@@ -2,6 +2,7 @@
 import { FollowCountRequest, FollowCountResponse } from "tweeter-shared";
 import { FollowService } from "../../model/service/FollowService";
 import { handleError, CORS_HEADERS } from "../../util/ServerUtil";
+import { DynamoDAOFactory } from "../../model/dao/dynamo/DynamoDAOFactory";
 
 export const handler = async (
   request: FollowCountRequest,
@@ -13,7 +14,7 @@ export const handler = async (
     throw new Error("[bad-request] missing userAlias");
   }
   try {
-    const followService = new FollowService();
+    const followService = new FollowService(new DynamoDAOFactory());
     const count = await followService.getFollowerCount(
       request.token,
       request.userAlias,
