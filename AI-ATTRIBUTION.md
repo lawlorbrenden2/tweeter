@@ -128,3 +128,8 @@
 - Tool: Cline
 - Task: Add putFeedBatch to StatusDAO and replace StatusService FakeData usage with injected status, follow, and auth DAOs, refreshed 30-minute token validation, and paginated follower feed writes. Reject author aliases that do not exactly match the authenticated alias, as confirmed by the user, while preserving public signatures and aliases.
 - Review: Verified putFeedBatch method was properly defined in the StatusDAO, FakeData was completely gone from StatusService, and that database operations were implemented properly.
+
+## 2026-11-23: tweeter-server/src/model/dao/dynamo/DynamoDAOFactory.ts (new file), AI-ATTRIBUTION.md
+- Tool: Cline
+- Task: Implement the named-export DynamoDAOFactory adhering to DAOFactory, returning new concrete DynamoDB and S3 DAO instances on each call. Validate targeted TypeScript compilation without modifying DAO interfaces, implementations, services, handlers, templates, shared/client modules, or tests.
+- Review: Verified the DynamoDAOFactory properly implements the DAOFactory and returns all the DAOs.
