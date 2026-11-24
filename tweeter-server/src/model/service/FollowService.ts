@@ -29,8 +29,7 @@ export class FollowService implements Service {
       pageSize,
       lastItem?.alias,
     );
-    const records = await Promise.all(aliases.map((alias) => this.userDAO.getUser(alias)));
-    const users = records.flatMap((record) => record ? [record.user] : []);
+    const users = await this.resolveUsers(aliases);
     return [users, hasMore];
   }
 
@@ -46,9 +45,13 @@ export class FollowService implements Service {
       pageSize,
       lastItem?.alias,
     );
-    const records = await Promise.all(aliases.map((alias) => this.userDAO.getUser(alias)));
-    const users = records.flatMap((record) => record ? [record.user] : []);
+    const users = await this.resolveUsers(aliases);
     return [users, hasMore];
+  }
+
+  private async resolveUsers(aliases: string[]): Promise<UserDto[]> {
+    const records = await Promise.all(aliases.map((alias) => this.userDAO.getUser(alias)));
+    return records.flatMap((record) => record ? [record.user] : []);
   }
 
   public async getIsFollowerStatus(

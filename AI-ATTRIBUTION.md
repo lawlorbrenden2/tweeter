@@ -148,3 +148,8 @@
 - Tool: Cline
 - Task: Extract shared DynamoStatusDAO story/feed pagination into a private getPageOfStatuses helper while preserving public signatures and DynamoDB query behavior. Validate with the tweeter-server build without adding tests.
 - Review: Verified the newly created helper function preserved the original logic and that it is called properly by the two other functions.
+
+## 2026-11-24: tweeter-server/src/model/service/FollowService.ts, AI-ATTRIBUTION.md
+- Tool: Cline
+- Task: Extract duplicated alias-to-UserDto resolution in FollowService into a private resolveUsers helper using Promise.all and flatMap, preserving public signatures and behavior. Validate with the tweeter-server build without adding tests.
+- Review: Verified the newly created helper function preserved the original logic and that it is called properly by the two other functions.
